@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>What Energy Do You Give Off? | Quizzical</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #fff4f8;
+  color: #222;
+}
+
+/* ===== NAV ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 25px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.hamburger { font-size: 22px; cursor: pointer; }
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #080a26;
+  cursor: pointer;
+}
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  gap: 22px;
+}
+.nav-links a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #444;
+}
+.nav-links a:hover { color: #96054d; }
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 65px;
+  left: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  min-width: 200px;
+  padding: 8px 0;
+}
+.dropdown a {
+  display: block;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: #444;
+}
+.dropdown a:hover { color: #96054d; }
+.dropdown-title {
+  padding: 10px 20px 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #777;
+}
+
+/* ===== QUIZ ===== */
+.quiz-container {
+  max-width: 680px;
+  margin: 32px auto;
+  padding: 32px 26px 48px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+  position: relative;
+
+  transform: scale(0.92);
+  transform-origin: top center;
+}
+
+.signature {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  font-size: 2.6rem;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.signature span { color: #0d2b63; }
+
+.progress {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.question {
+  font-size: 1.55rem;
+  margin: 30px 0 32px;
+  line-height: 1.4;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.option {
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  background: white;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.option:hover {
+  transform: translateY(-2px);
+}
+
+.option img {
+  width: 100%;
+  height: 190px;              /* BIGGER IMAGE */
+  object-fit: cover;
+  object-position: center;    /* CENTERED */
+}
+
+.option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 14px;
+  text-align: center;
+  font-size: 1.6rem;          /* BIG TEXT */
+  font-weight: 600;
+}
+
+.option.text-only span {
+  min-height: 190px;
+}
+
+.option.selected {
+  border-color: #0d2b63;
+  box-shadow: 0 0 0 2px rgba(13,43,99,0.3);
+}
+
+.next-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.next-btn {
+  padding: 14px 30px;
+  border-radius: 24px;
+  border: none;
+  background: #ccc;
+  color: white;
+  cursor: not-allowed;
+  font-size: 1rem;
+}
+
+.next-btn.enabled {
+  background: #00050d;
+  cursor: pointer;
+}
+
+/* ===== RESULT ===== */
+.result {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.result img {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 20px;
+  margin-bottom: 26px;
+}
+
+.result h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="hamburger" id="hamburger">☰</div>
+  <div class="logo" onclick="location.href='index.html'">Quizzical</div>
+  <div class="nav-links">
+    <a href="#">Quizzes</a>
+    <a href="#">Latest</a>
+    <a href="#">TV & Films</a>
+  </div>
+  <div class="dropdown" id="dropdown">
+    <a href="index.html">Homepage</a>
+    <div class="dropdown-title">Category</div>
+    <a href="#">TV & Films</a>
+    <a href="#">Quizzes</a>
+    <a href="#">Latest</a>
+  </div>
+</div>
+
+<div class="quiz-container">
+  <div class="signature">🍍<span>✦</span></div>
+
+  <div class="progress" id="progress"></div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+
+  <div class="next-wrap">
+    <button class="next-btn" id="nextBtn">Next</button>
+  </div>
+</div>
+
+<script>
+const quiz = [
+{
+q:"What are you most complimented on?",
+options:[
+{t:"Looks",img:"images/looks.jpg",e:"magnetic"},
+{t:"Confidence",img:"images/confidence.jpg",e:"magnetic"},
+{t:"Kindness",img:"images/kindness.jpg",e:"warm"},
+{t:"Calmness",img:"images/calmness.jpg",e:"calm"}
+]},
+{
+q:"Which element are you drawn to?",
+options:[
+{t:"Fire",img:"images/fire.jpg",e:"magnetic"},
+{t:"Water",img:"images/water.jpg",e:"warm"},
+{t:"Air",img:"images/air.jpg",e:"mysterious"},
+{t:"Earth",img:"images/earth.jpg",e:"calm"}
+]},
+{
+q:"How big is your friend circle?",
+options:[
+{t:"0",e:"mysterious"},
+{t:"2",e:"warm"},
+{t:"3",e:"calm"},
+{t:"4+",e:"magnetic"}
+]},
+{
+q:"Which activity do you do most often?",
+options:[
+{t:"Scrolling",e:"mysterious"},
+{t:"Studying",e:"calm"},
+{t:"Hanging out",e:"magnetic"},
+{t:"Self-improvement",e:"calm"}
+]},
+{
+q:"Where do you prefer to have your meals?",
+options:[
+{t:"Cafés",e:"magnetic"},
+{t:"Home",e:"warm"},
+{t:"Fancy restaurants",e:"magnetic"},
+{t:"Doesn’t matter",e:"calm"}
+]},
+{
+q:"What excites you the most?",
+options:[
+{t:"Family time",e:"warm"},
+{t:"Challenges",e:"magnetic"},
+{t:"Partying",e:"magnetic"},
+{t:"Connection",e:"warm"}
+]},
+{
+q:"How calm are you generally?",
+options:[
+{t:"Intense",e:"magnetic"},
+{t:"Balanced",e:"calm"},
+{t:"Calm",e:"calm"},
+{t:"Grounded",e:"calm"}
+]},
+{
+q:"Who are you closest to?",
+options:[
+{t:"Partner",e:"warm"},
+{t:"Family",e:"warm"},
+{t:"Friends",e:"magnetic"},
+{t:"Self",e:"mysterious"}
+]},
+{
+q:"What do you prefer to wear?",
+options:[
+{t:"Bold",e:"magnetic"},
+{t:"Comfortable",e:"warm"},
+{t:"Elegant",e:"calm"},
+{t:"Cute",e:"warm"}
+]},
+{
+q:"What kind of shows do you enjoy most?",
+options:[
+{t:"Thriller",e:"mysterious"},
+{t:"Romantic",e:"warm"},
+{t:"Murder mystery",e:"mysterious"},
+{t:"Comedy",e:"magnetic"}
+]}
+];
+
+const results={
+magnetic:{title:"Magnetic Energy ✨🍷",img:"images/magnetic.jpg",desc:"You naturally draw attention. Your presence is hard to ignore."},
+warm:{title:"Warm Energy 🤍🫧",img:"images/warm.jpg",desc:"People feel safe, seen, and emotionally close to you."},
+calm:{title:"Calm / Grounded Energy 🌿",img:"images/calm.jpg",desc:"Your presence brings peace and stability."},
+mysterious:{title:"Mysterious Energy 🌙🖤",img:"images/mysterious.jpg",desc:"You’re deep, observant, and quietly intriguing."}
+};
+
+let i=0,score={magnetic:0,warm:0,calm:0,mysterious:0};
+const qEl=document.getElementById("question");
+const oEl=document.getElementById("options");
+const pEl=document.getElementById("progress");
+const nBtn=document.getElementById("nextBtn");
+
+function load(){
+const q=quiz[i];
+qEl.textContent=q.q;
+pEl.textContent=`${i+1} / 10`;
+oEl.innerHTML="";
+nBtn.classList.remove("enabled");
+let chosen=null;
+
+q.options.forEach(opt=>{
+const d=document.createElement("div");
+d.className="option";
+if(opt.img){
+d.innerHTML=`<img src="${opt.img}"><span>${opt.t}</span>`;
+}else{
+d.classList.add("text-only");
+d.innerHTML=`<span>${opt.t}</span>`;
+}
+d.onclick=()=>{
+document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+d.classList.add("selected");
+chosen=opt.e;
+nBtn.classList.add("enabled");
+};
+oEl.appendChild(d);
+});
+
+nBtn.onclick=()=>{
+if(!chosen)return;
+score[chosen]++;
+i++;
+if(i<quiz.length)load();
+else showResult();
+};
+}
+
+function showResult(){
+const top=Object.keys(score).reduce((a,b)=>score[a]>score[b]?a:b);
+const r=results[top];
+document.querySelector(".quiz-container").innerHTML=`
+<div class="result">
+<img src="${r.img}">
+<h2>${r.title}</h2>
+<p>${r.desc}</p>
+</div>`;
+}
+
+load();
+
+/* hamburger */
+const h=document.getElementById("hamburger");
+const d=document.getElementById("dropdown");
+h.onclick=e=>{e.stopPropagation();d.style.display=d.style.display==="block"?"none":"block";}
+document.onclick=()=>d.style.display="none";
+</script>
+
+</body>
+</html>

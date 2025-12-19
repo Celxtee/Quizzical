@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quizzical</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #fff4f8;
+      color: #333;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 25px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    /* LOGO */
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      font-weight: 600;
+      color: #080a26;
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+      font-size: 22px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* TOP LINKS */
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.9rem;
+      color: #444;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #96054d;
+    }
+
+    /* DROPDOWN MENU */
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 65px;
+      left: 25px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      min-width: 200px;
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: #444;
+      transition: color 0.2s ease;
+    }
+
+    .dropdown a:hover {
+      color: #96054d;
+    }
+
+    .dropdown-title {
+      padding: 10px 20px 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #777;
+      cursor: default;
+    }
+
+    /* MAIN CONTENT */
+    .content {
+      max-width: 900px;
+      margin: auto;
+      padding: 80px 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAV BAR ===== -->
+  <div class="topbar">
+    <div class="hamburger" id="hamburger">☰</div>
+    <div class="logo">Quizzical</div>
+
+   <div class="nav-links">
+  <a href="index.html#quizzes">Quizzes</a>
+  <a href="index.html#latest">Latest</a>
+  <a href="#">TV & Films</a>
+</div>
+
+
+    <!-- DROPDOWN -->
+    <div class="dropdown" id="dropdown">
+      <a href="index.html">Homepage</a>
+
+      <div class="dropdown-title">Category</div>
+
+      <a href="#">TV & Films</a>
+      <div class="dropdown-title">Latest</div>
+<a href="what-energy.html">What Energy Do You Give Off?</a>
+
+<div class="dropdown-title">Quizzes</div>
+<a href="what-energy.html">What Energy Do You Give Off?</a>
+
+      <!-- add more anytime -->
+    </div>
+  </div>
+
+  <!-- ===== CONTENT ===== -->
+ <div class="content">
+  <p>Welcome to Quizzical.</p>
+  <p>Explore quizzes, pop culture, and more.</p>
+
+ <a href="what-energy.html" class="quiz-card">
+  <h2>What Energy Do You Give Off?</h2>
+  <p>Discover how others perceive your presence.</p>
+</a>
+
+
+
+  <!-- ===== SCRIPT ===== -->
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const dropdown = document.getElementById("dropdown");
+
+    hamburger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      dropdown.style.display =
+        dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function () {
+      dropdown.style.display = "none";
+    });
+  </script>
+
+</body>
+</html>
